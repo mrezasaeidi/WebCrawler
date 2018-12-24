@@ -40,14 +40,14 @@ public class DownloadFile {
     * start downloading file and saving it
     */
     public void startDownload(){
-        dt = new DownloadThread(this.url, new File(this.path) , links);
+        dt = new DownloadThread(this.url, new File(this.path));
     }
     
     /*
     *   start downloading file and updating progressbar that has been made by gui part
     */
     public void startDownload(JProgressBar jp){
-        dt = new DownloadThread(this.url, new File(this.path) , links , jp);
+        dt = new DownloadThread(this.url, new File(this.path) , jp);
     }
     /*
     *   return true if download completed else false
@@ -85,16 +85,7 @@ public class DownloadFile {
         
         return null;
     }
-    /*
-    *   if returned file just add it to tree 
-    *   but if returned directory add a new tree to it
-    */
-    public String getType(){
-        
-        if(isfile)
-            return "File";
-        return "Directory";
-    }
+    
 }
 
 

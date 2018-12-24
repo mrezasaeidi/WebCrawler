@@ -22,24 +22,21 @@ public class DownloadThread extends Thread {
     private JProgressBar jp = null;
     private File out;
     private boolean status = false;
-    private ArrayList<String> links = new ArrayList<>();
 
     /**
      * out is a file with the address have to be save directory structure
      *
      */
-    public DownloadThread(URL url, File out,ArrayList<String> links , JProgressBar jp) {
+    public DownloadThread(URL url, File out, JProgressBar jp) {
         this.jp = jp;
         this.out = out;
         this.url = url;
-        this.links = links;
         this.start();
     }
 
-    public DownloadThread(URL url, File out , ArrayList<String> links) {
+    public DownloadThread(URL url, File out) {
         this.out = out;
         this.url = url;
-        this.links = links;
         this.start();
     }
 
@@ -80,12 +77,6 @@ public class DownloadThread extends Thread {
         return this.status;
     }
 
-    public ArrayList<String> returnLinks(){
-        if(!links.isEmpty())
-            return this.links;
-        return null;
-    }
-    
 }
 
 // we have to do the recursion part here and we have to get a depth here to check if needed to make new Thread
