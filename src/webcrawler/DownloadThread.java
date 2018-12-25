@@ -17,16 +17,11 @@ import javax.swing.JProgressBar;
  */
 public class DownloadThread extends Thread {
 
-    // can get the progressbar and set its value here 
     private URL url;
     private JProgressBar jp = null;
     private File out;
     private boolean status = false;
 
-    /**
-     * out is a file with the address have to be save directory structure
-     *
-     */
     public DownloadThread(URL url, File out, JProgressBar jp) {
         this.jp = jp;
         this.out = out;
@@ -52,9 +47,7 @@ public class DownloadThread extends Thread {
             double downloaded = 0.00;
             int read = 0;
             double percentDownloaded = 0.00;
-            while ((read = in.read(buffer, 0, 1024)) >= 0) {
-                
-                // does the job here for finding links if it is a html file
+            while ((read = in.read(buffer, 0, 1024)) >= 0) {                
                 bos.write(buffer, 0, read);
                 downloaded += read;
                 if (jp != null) {
@@ -78,7 +71,3 @@ public class DownloadThread extends Thread {
     }
 
 }
-
-// we have to do the recursion part here and we have to get a depth here to check if needed to make new Thread
-// again and add them as child or Children we have to check it
-// is it good to start many threads here 

@@ -22,41 +22,35 @@ public class DownloadFile {
     private String path = "";// path to save file for directory structure
     private boolean status = false;
     private DownloadThread dt;
-    private ArrayList<String> links = new ArrayList<>();
-// path if is file then set file name else make a directory and set as the last path
     
     public DownloadFile(String url , String path) throws MalformedURLException{
         this.url = new URL(url);
-        
-        // if just doing the path or do the file part with name out here
-        // making path should have a process 
         this.path = path;
-        // have to set name directory or file
-        this.name = "";
+        this.name = url;
         
     }
     
-    /*
+    /**
     * start downloading file and saving it
     */
     public void startDownload(){
         dt = new DownloadThread(this.url, new File(this.path));
     }
     
-    /*
+    /**
     *   start downloading file and updating progressbar that has been made by gui part
     */
     public void startDownload(JProgressBar jp){
         dt = new DownloadThread(this.url, new File(this.path) , jp);
     }
-    /*
+    /**
     *   return true if download completed else false
     */
     public boolean getStatus(){
         return this.dt.getStatus();
     }
     
-    /*
+    /**
     *   get file size for showing in gui
     */
     public double getFileSize() throws IOException{
@@ -70,7 +64,7 @@ public class DownloadFile {
     }
     
     
-    /*
+    /**
     *   open in browser or special files in their default applications
     */
     public void openFile() throws IOException{
@@ -79,16 +73,7 @@ public class DownloadFile {
     }
     
     
-    public ArrayList<String> returnLinks(){
-        if(!links.isEmpty())
-            return this.links;
-        
-        return null;
-    }
-    
 }
 
 
-// we have to create directories here if needed
-// how to set the path is so important 
 

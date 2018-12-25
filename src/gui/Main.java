@@ -1,5 +1,12 @@
 package gui;
 
+import java.io.File;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTree;
+import javax.swing.SwingUtilities;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.JProgressBar;
@@ -15,7 +22,7 @@ public class Main extends javax.swing.JFrame {
         new Timer(100, (e) -> {
             jProgressBar1.setValue(jProgressBar1.getValue() + 1);
         }).start();
-        
+
     }
 
     /**
@@ -101,6 +108,9 @@ public class Main extends javax.swing.JFrame {
         }
 
     }
+
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JProgressBar jProgressBar1;
     // End of variables declaration//GEN-END:variables
