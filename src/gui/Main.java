@@ -13,6 +13,7 @@ public class Main extends javax.swing.JFrame {
         this.setLocation((int) (d.getWidth() - this.getWidth()) / 2, (int) (d.getHeight() - this.getHeight()) / 2);
         this.setTitle("Web Crawler");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+       
     }
 
     /**
@@ -27,7 +28,7 @@ public class Main extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         treeOfLinks = new javax.swing.JTree();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        downloadList_tab = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         addUrl_item = new javax.swing.JMenu();
         showFolder_item = new javax.swing.JMenu();
@@ -36,7 +37,7 @@ public class Main extends javax.swing.JFrame {
 
         jScrollPane1.setViewportView(treeOfLinks);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        downloadList_tab.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -59,7 +60,7 @@ public class Main extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane3.setViewportView(jTable1);
+        jScrollPane3.setViewportView(downloadList_tab);
 
         addUrl_item.setText("Add URL");
         addUrl_item.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -84,14 +85,14 @@ public class Main extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 702, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 551, Short.MAX_VALUE)
         );
 
         pack();
@@ -99,10 +100,13 @@ public class Main extends javax.swing.JFrame {
 
     private void addUrl_itemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addUrl_itemMouseClicked
         // TODO add your handling code here:
+        AddUrl add =new AddUrl();
+        add.setVisible(true);
     }//GEN-LAST:event_addUrl_itemMouseClicked
 
     private void showFolder_itemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_showFolder_itemMouseClicked
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_showFolder_itemMouseClicked
 
     /**
@@ -138,6 +142,7 @@ public class Main extends javax.swing.JFrame {
                 new Main().setVisible(true);
             }
         });
+        
     }
 
     class GuiThread extends Thread {
@@ -160,10 +165,10 @@ public class Main extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu addUrl_item;
+    private javax.swing.JTable downloadList_tab;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
     private javax.swing.JMenu showFolder_item;
     private javax.swing.JTree treeOfLinks;
     // End of variables declaration//GEN-END:variables
