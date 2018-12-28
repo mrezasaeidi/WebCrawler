@@ -30,7 +30,7 @@ public class FileBrowser implements Runnable {
         JFrame frame = new JFrame("File Browser");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        File fileRoot = new File("C:/");
+        File fileRoot = new File("E:/");
         root = new DefaultMutableTreeNode(new FileNode(fileRoot));
         treeModel = new DefaultTreeModel(root);
 
