@@ -61,6 +61,10 @@ public class DownloadFile {
         return this.name;
     }
     
+    public String getUrl(){
+        return this.url.toString();
+    }
+    
     
     /**
     *   open in browser or special files in their default applications
@@ -68,10 +72,5 @@ public class DownloadFile {
     public void openFile() throws IOException{
         Desktop desktop = Desktop.getDesktop();
         desktop.open(new File(this.path));
-    }
-    
-    
+    }   
 }
-
-
-

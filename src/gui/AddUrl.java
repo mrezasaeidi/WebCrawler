@@ -7,7 +7,7 @@ package gui;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import static javax.swing.JFrame.EXIT_ON_CLOSE;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -15,16 +15,19 @@ import static javax.swing.JFrame.EXIT_ON_CLOSE;
  */
 public class AddUrl extends javax.swing.JFrame {
 
+    Main main;
+
     /**
      * Creates new form AddUrl
      */
-    public AddUrl() {
+    public AddUrl(Main main) {
         initComponents();
         this.setResizable(false);
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation((int) (d.getWidth() - this.getWidth()) / 2, (int) (d.getHeight() - this.getHeight()) / 2);
         this.setTitle("Add URL");
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.main = main;
     }
 
     /**
@@ -144,46 +147,37 @@ public class AddUrl extends javax.swing.JFrame {
 
     private void cancel_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancel_btnMouseClicked
         // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_cancel_btnMouseClicked
 
     private void ok_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ok_btnMouseClicked
         // TODO add your handling code here:
+        if (depth_tf.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "please fill all of the fields.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        int depth=-1;
+        try {
+            depth = Integer.parseInt(depth_tf.getText());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(rootPane, "depth should be a number", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (!url_tf.getText().isEmpty() && !path_tf.getText().isEmpty() && depth >= 0) {
+            main.dispose();
+            Main main2 = new Main(url_tf.getText(), Integer.parseInt(depth_tf.getText()), path_tf.getText());
+            main2.setVisible(true);
+            this.dispose();
+        }else {
+            if(depth<0){
+                JOptionPane.showMessageDialog(rootPane, "depth should be a positive number", "ERROR", JOptionPane.ERROR_MESSAGE);
+            }else{
+                JOptionPane.showMessageDialog(rootPane, "please fill all of the fields.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+            
+        }
     }//GEN-LAST:event_ok_btnMouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddUrl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddUrl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddUrl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddUrl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new AddUrl().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancel_btn;

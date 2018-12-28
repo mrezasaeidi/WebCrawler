@@ -6,6 +6,10 @@ import javax.swing.JProgressBar;
 
 public class Main extends javax.swing.JFrame {
 
+    private String url;
+    private String path;
+    private int depth;
+
     public Main() {
         initComponents();
         this.setResizable(false);
@@ -13,7 +17,19 @@ public class Main extends javax.swing.JFrame {
         this.setLocation((int) (d.getWidth() - this.getWidth()) / 2, (int) (d.getHeight() - this.getHeight()) / 2);
         this.setTitle("Web Crawler");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-       
+
+    }
+
+    public Main(String url, int depth, String path) {
+        this();
+        this.url=url;
+        this.path=path;
+        this.depth=depth;
+        set_ui();
+    }
+
+    public void set_ui() {
+
     }
 
     /**
@@ -31,7 +47,7 @@ public class Main extends javax.swing.JFrame {
         downloadList_tab = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         addUrl_item = new javax.swing.JMenu();
-        showFolder_item = new javax.swing.JMenu();
+        downloadAll_item = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -70,13 +86,13 @@ public class Main extends javax.swing.JFrame {
         });
         jMenuBar1.add(addUrl_item);
 
-        showFolder_item.setText("Show Folder");
-        showFolder_item.addMouseListener(new java.awt.event.MouseAdapter() {
+        downloadAll_item.setText("Download All");
+        downloadAll_item.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                showFolder_itemMouseClicked(evt);
+                downloadAll_itemMouseClicked(evt);
             }
         });
-        jMenuBar1.add(showFolder_item);
+        jMenuBar1.add(downloadAll_item);
 
         setJMenuBar(jMenuBar1);
 
@@ -100,14 +116,14 @@ public class Main extends javax.swing.JFrame {
 
     private void addUrl_itemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addUrl_itemMouseClicked
         // TODO add your handling code here:
-        AddUrl add =new AddUrl();
+        AddUrl add = new AddUrl(this);
         add.setVisible(true);
     }//GEN-LAST:event_addUrl_itemMouseClicked
 
-    private void showFolder_itemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_showFolder_itemMouseClicked
+    private void downloadAll_itemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_downloadAll_itemMouseClicked
         // TODO add your handling code here:
-        
-    }//GEN-LAST:event_showFolder_itemMouseClicked
+
+    }//GEN-LAST:event_downloadAll_itemMouseClicked
 
     /**
      * @param args the command line arguments
@@ -142,7 +158,7 @@ public class Main extends javax.swing.JFrame {
                 new Main().setVisible(true);
             }
         });
-        
+
     }
 
     class GuiThread extends Thread {
@@ -162,14 +178,13 @@ public class Main extends javax.swing.JFrame {
     }
 
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu addUrl_item;
+    private javax.swing.JMenu downloadAll_item;
     private javax.swing.JTable downloadList_tab;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JMenu showFolder_item;
     private javax.swing.JTree treeOfLinks;
     // End of variables declaration//GEN-END:variables
 }
