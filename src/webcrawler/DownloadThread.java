@@ -52,7 +52,7 @@ public class DownloadThread extends Thread {
                 if (jp != null) {
                     percentDownloaded += (downloaded * 100 / filesize);  
                     this.jp.setMaximum((int) filesize);
-                    this.jp.setValue((int) percentDownloaded);
+                    this.jp.setValue((int)downloaded);
                     this.jp.setString(percentDownloaded+"%");
                 }
             }

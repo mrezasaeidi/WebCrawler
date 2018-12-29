@@ -35,9 +35,9 @@ public class DownloadPage extends javax.swing.JFrame {
         this.df=df;
         
         url_lab.setText(df.getUrl());
-        status_lab.setText((df.getStatus()?"true":"false"));
+        status_lab.setText((df.getStatus()?"Downloaded":"Not Downloaded"));
         try {
-            size_lab.setText(df.getFileSize()+" MB");
+            size_lab.setText(df.getFileSize()+" Byte");
         } catch (IOException ex) {
             Logger.getLogger(DownloadPage.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -161,7 +161,7 @@ public class DownloadPage extends javax.swing.JFrame {
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                downloaded_lab.setText(progressBar.getValue()+"");
+                downloaded_lab.setText(progressBar.getValue()+" Byte");
             }
         }, 0, 1000);
     }//GEN-LAST:event_download_btnMouseClicked

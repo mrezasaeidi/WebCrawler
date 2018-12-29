@@ -2,13 +2,33 @@ package gui;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.concurrent.Task;
+import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
+import javax.swing.table.DefaultTableModel;
+import sun.security.krb5.internal.rcache.DflCache;
+import webcrawler.DownloadFile;
+import webcrawler.LinkChecker;
+import webcrawler.Node;
+import webcrawler.Tree;
 
 public class Main extends javax.swing.JFrame {
 
     private String url;
     private String path;
     private int depth;
+    private Node<String> root = null;
+    private DefaultTableModel model;
+    private List<DownloadFile> df=null;
 
     public Main() {
         initComponents();
@@ -22,13 +42,45 @@ public class Main extends javax.swing.JFrame {
 
     public Main(String url, int depth, String path) {
         this();
-        this.url=url;
-        this.path=path;
-        this.depth=depth;
+        this.url = url;
+        this.path = path;
+        this.depth = depth;
         set_ui();
     }
 
     public void set_ui() {
+        model = (DefaultTableModel) downloadList_tab.getModel();
+        String a[] = new String[3];
+        try {
+            root = new Node<String>(new URL(this.url).toString(),path);
+            Tree tree = new Tree(root.getData().toString(), root.getPath());
+            LinkChecker lc = new LinkChecker(root, depth);
+            new Timer().scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    List<Node> list = root.getChildren();
+                    df = new ArrayList<>();
+                    for (int i = 0; i < list.size(); i++) {
+                        if (list.get(i).getData() instanceof DownloadFile) {
+                            df.add((DownloadFile) list.get(i).getData());
+                        }
+                    }
+                    for(int i=0;i<df.size();i++) {
+                        try {
+                            model.addRow(a);
+                            downloadList_tab.setValueAt(df.get(i).getFileName(),i,0);
+                            downloadList_tab.setValueAt(df.get(i).getFileSize(),i,1);
+                            downloadList_tab.setValueAt((df.get(i).getStatus()?"Downloaded":"Not Downloaded"),i,0);
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+
+                    }
+                }
+            }, 0, 5000);
+        } catch (MalformedURLException ex) {
+            ex.printStackTrace();
+        }
 
     }
 
@@ -58,14 +110,14 @@ public class Main extends javax.swing.JFrame {
 
             },
             new String [] {
-                "File Name", "Size", "Status", "Last Try Date"
+                "File Name", "Size", "Status"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.Object.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -74,6 +126,11 @@ public class Main extends javax.swing.JFrame {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        downloadList_tab.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                downloadList_tabMouseClicked(evt);
             }
         });
         jScrollPane3.setViewportView(downloadList_tab);
@@ -124,6 +181,13 @@ public class Main extends javax.swing.JFrame {
         // TODO add your handling code here:
 
     }//GEN-LAST:event_downloadAll_itemMouseClicked
+
+    private void downloadList_tabMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_downloadList_tabMouseClicked
+        // TODO add your handling code here:
+        if(df==null)return;
+        DownloadPage dp=new DownloadPage(df.get(downloadList_tab.getSelectedRow()));
+        dp.setVisible(true);
+    }//GEN-LAST:event_downloadList_tabMouseClicked
 
     /**
      * @param args the command line arguments

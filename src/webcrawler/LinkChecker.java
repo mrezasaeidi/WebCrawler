@@ -66,10 +66,11 @@ public class LinkChecker extends Thread {
             try {
                 df = new DownloadFile(this.root.getData(), this.root.getPath() + root);
                 //df.startDownload();
+                System.out.println(df.getFileName());
             } catch (MalformedURLException ex) {
                 ex.printStackTrace();
             }
-            Node<DownloadFile> newnode = new Node<DownloadFile>(df , this.root.getPath() + root);
+            Node<DownloadFile> newnode = new Node<DownloadFile>(df, this.root.getPath() + root);
             newnode.setParent(newnode);
             this.root.addChild(newnode);
             return;
@@ -78,7 +79,13 @@ public class LinkChecker extends Thread {
             return;
         }
         try {
-            String path = this.root.getParent().getPath() + root;
+            String path = "";
+            if (this.root.getParent() == null) {
+                path = this.root.getPath();
+                System.out.println(path);
+            } else {
+                path = this.root.getParent().getPath() + root;
+            }
             File theDir = new File(path);
             theDir.mkdir();
             String input;
@@ -94,6 +101,7 @@ public class LinkChecker extends Thread {
                 match = match.replace("href=", "");
                 match = match.replace("\"", "");
                 Node<String> newnode = new Node<String>(match, path);
+                System.out.println(newnode.getPath());
                 newnode.setParent(this.root);
                 this.root.addChild(newnode);
                 new LinkChecker(newnode, depth - 1);
