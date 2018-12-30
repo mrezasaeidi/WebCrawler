@@ -28,6 +28,7 @@ public class AddUrl extends javax.swing.JFrame {
         this.setTitle("Add URL");
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.main = main;
+        this.setAlwaysOnTop(true);
     }
 
     /**

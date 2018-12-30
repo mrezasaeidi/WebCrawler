@@ -10,9 +10,6 @@ import java.awt.Toolkit;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import webcrawler.DownloadFile;
 
 /**
  *
@@ -33,11 +30,12 @@ public class DownloadPage extends javax.swing.JFrame {
         this.setTitle(df.getFileName());
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         this.df=df;
-        
-        url_lab.setText(df.getUrl());
+        open_btn.setEnabled(false);
+        url_lab.setText(df.getUrl().substring(0, (df.getUrl().length()>90?90:df.getUrl().length())));
         status_lab.setText((df.getStatus()?"Downloaded":"Not Downloaded"));
         size_lab.setText(df.getFileSize()+" Byte");
-        downloaded_lab.setText("0 MB");
+        downloaded_lab.setText("0 Byte");
+        this.setAlwaysOnTop(true);
     }
 
     /**
@@ -49,6 +47,7 @@ public class DownloadPage extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
         url_lab = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -59,6 +58,9 @@ public class DownloadPage extends javax.swing.JFrame {
         status_lab = new javax.swing.JLabel();
         size_lab = new javax.swing.JLabel();
         downloaded_lab = new javax.swing.JLabel();
+        open_btn = new javax.swing.JButton();
+
+        jLabel1.setText("jLabel1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -90,6 +92,13 @@ public class DownloadPage extends javax.swing.JFrame {
 
         downloaded_lab.setText("jLabel1");
 
+        open_btn.setText("Open Folder");
+        open_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                open_btnMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -97,12 +106,7 @@ public class DownloadPage extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 377, Short.MAX_VALUE)
-                        .addComponent(cancel_btn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(download_btn))
+                    .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 527, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(url_lab)
@@ -118,7 +122,15 @@ public class DownloadPage extends javax.swing.JFrame {
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(downloaded_lab)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(cancel_btn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(download_btn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(open_btn)
+                        .addGap(4, 4, 4)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -143,7 +155,8 @@ public class DownloadPage extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(download_btn)
-                    .addComponent(cancel_btn))
+                    .addComponent(cancel_btn)
+                    .addComponent(open_btn))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -154,10 +167,16 @@ public class DownloadPage extends javax.swing.JFrame {
         // TODO add your handling code here:
         df.startDownload(progressBar);
         download_btn.setEnabled(false);
+        cancel_btn.setEnabled(false);
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 downloaded_lab.setText(progressBar.getValue()+" Byte");
+                if(progressBar.getValue()==df.getFileSize()){
+                    open_btn.setEnabled(true);
+                    cancel_btn.setEnabled(true);
+                    cancel_btn.setText("Close");
+                }
             }
         }, 0, 1000);
     }//GEN-LAST:event_download_btnMouseClicked
@@ -167,14 +186,25 @@ public class DownloadPage extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_cancel_btnMouseClicked
 
+    private void open_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_open_btnMouseClicked
+        try {
+            // TODO add your handling code here:
+            df.openFile();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_open_btnMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancel_btn;
     private javax.swing.JButton download_btn;
     private javax.swing.JLabel downloaded_lab;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JButton open_btn;
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JLabel size_lab;
     private javax.swing.JLabel status_lab;

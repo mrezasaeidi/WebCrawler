@@ -2,16 +2,11 @@ package webcrawler;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import javax.swing.JProgressBar;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.table.DefaultTableModel;
-import webcrawler.LinkChecker;
 
 public class Main extends javax.swing.JFrame {
 
@@ -69,10 +64,18 @@ public class Main extends javax.swing.JFrame {
             model.addRow(a);
             int filesize = df.get(i).getFileSize();
             downloadList_tab.setValueAt(df.get(i).getFileName(), i, 0);
-            downloadList_tab.setValueAt(((filesize!=0) ? ""+filesize : "Error with link"), i, 1);
+            downloadList_tab.setValueAt(((filesize != 0) ? "" + filesize : "Error with link"), i, 1);
             downloadList_tab.setValueAt((df.get(i).getStatus() ? "Downloaded" : "Not Downloaded"), i, 2);
-
         }
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                for (int i = 0; i < df.size(); i++) {
+                    downloadList_tab.setValueAt((df.get(i).getStatus() ? "Downloaded" : "Not Downloaded"), i, 2);
+                }
+            }
+        }, 0, 1000);
+
         System.out.println(allnodes.size());
 
     }
@@ -100,7 +103,7 @@ public class Main extends javax.swing.JFrame {
 
         downloadList_tab.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null}
+
             },
             new String [] {
                 "File Name", "Size", "Status"
