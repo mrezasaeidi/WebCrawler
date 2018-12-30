@@ -12,14 +12,14 @@ public class Tree {
     private Node root;
     private ArrayList<Node> allnodes;
 
-    public Tree(Node root, String path) {
+    public Tree(Node root) {
         this.root = root;
         this.allnodes = null;
 
     }
 
-    public Object getData() {
-        return this.root.getData();
+    public Object getDownloadFile() {
+        return this.root.getDownloadFile();
     }
 
     public String getPath() {
@@ -31,7 +31,6 @@ public class Tree {
             this.allnodes.addAll(0, root.getChildren());
             this.allnodes.forEach((el) -> {
                 visitAll(el);
-                System.out.println(el.getData());
             });
         } catch (Exception e) {
             return;
@@ -44,7 +43,6 @@ public class Tree {
      */
     public ArrayList<Node> getAllNodes() {
         allnodes.add(root);
-        System.out.println(root.getData());
         visitAll(root);
         return allnodes;
     }

@@ -12,16 +12,22 @@ import java.util.List;
  *
  * @author G50
  */
-public class Node<T> {
+public class Node {
     
-        private T data = null;
+        private String url = "";
+        private DownloadFile data = null;
         private String path = null;
         private List<Node> children = new ArrayList<>();
         private Node parent = null;
 
-        public Node(T data , String Path) {
+        public Node(String url , String path) {
+            this.url = url;
+            this.path = path;
+        }
+        
+        public Node(DownloadFile data){
             this.data = data;
-            this.path = Path;
+            this.path = data.getPath();
         }
 
         public void addChild(Node child) {
@@ -38,21 +44,22 @@ public class Node<T> {
             return this.path;
         }
 
-        public T getData() {
-            return data;
+        public String getURL() {
+            return this.url;
         }
 
-        public void setData(T data) {
-            this.data = data;
-        }
 
         public void setParent(Node parent) {
             this.parent = parent;
         }
 
-        public Node<T> getParent() {
+        public Node getParent() {
             return parent;
         }
 
 
+        public DownloadFile getDownloadFile(){
+            return this.data;
+        }
+        
 }

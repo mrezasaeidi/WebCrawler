@@ -18,18 +18,20 @@ public class DownloadThread extends Thread {
     private URL url;
     private JProgressBar jp = null;
     private File out;
-    private boolean status = false;
+    private DownloadFile df;
 
-    public DownloadThread(URL url, File out, JProgressBar jp) {
+    public DownloadThread(URL url, File out, JProgressBar jp , DownloadFile df) {
         this.jp = jp;
         this.out = out;
+        this.df = df;
         this.url = url;
         this.start();
     }
 
-    public DownloadThread(URL url, File out) {
+    public DownloadThread(URL url, File out , DownloadFile df) {
         this.out = out;
         this.url = url;
+        this.df = df;
         this.start();
     }
 
@@ -57,7 +59,7 @@ public class DownloadThread extends Thread {
                     this.jp.setString(percentDownloaded + "%");
                 }
             }
-            this.status = true;
+            this.df.setStatus(true);
             bos.close();
             in.close();
 
@@ -66,8 +68,5 @@ public class DownloadThread extends Thread {
         }
     }
 
-    public boolean getStatus() {
-        return this.status;
-    }
 
 }

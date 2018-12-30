@@ -36,11 +36,7 @@ public class DownloadPage extends javax.swing.JFrame {
         
         url_lab.setText(df.getUrl());
         status_lab.setText((df.getStatus()?"Downloaded":"Not Downloaded"));
-        try {
-            size_lab.setText(df.getFileSize()+" Byte");
-        } catch (IOException ex) {
-            Logger.getLogger(DownloadPage.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        size_lab.setText(df.getFileSize()+" Byte");
         downloaded_lab.setText("0 MB");
     }
 

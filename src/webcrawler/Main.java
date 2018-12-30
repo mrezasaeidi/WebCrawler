@@ -7,6 +7,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JProgressBar;
 import javax.swing.table.DefaultTableModel;
 import webcrawler.LinkChecker;
@@ -23,10 +25,10 @@ public class Main extends javax.swing.JFrame {
 
     }
 
-    public Main(String url, int depth, String path) {
+    public Main(String url, int depth, String rootpath) {
         this();
         this.url = url;
-        this.path = path;
+        this.rootpath = rootpath;
         this.depth = depth;
         new Thread(new Runnable() {
             @Override
@@ -43,40 +45,35 @@ public class Main extends javax.swing.JFrame {
 
     public void set_ui() throws InterruptedException {
         // start a circular progress bar here
-        System.out.println("started");
         Tree tree = null;
         if (url.contains(".rar") || url.contains(".png") || url.contains(".jpg")
                 || url.contains(".css") || url.contains(".zip") || url.contains(".png")
                 || url.contains(".mp4") || url.contains(".mkv")) {
             try {
-                Node<DownloadFile> root = new Node<>(new DownloadFile(url, path), path);
-                tree = new Tree(root, path);
+                Node root = new Node(new DownloadFile(url, rootpath));
+                tree = new Tree(root);
             } catch (MalformedURLException ex) {
                 ex.printStackTrace();
             }
         } else {
 
-            tree = new Tree(new Node<String>(url, path), path);
+            tree = new Tree(new Node(url, this.rootpath));
             LinkChecker li = new LinkChecker(tree.getRoot(), 1);
-            System.out.println("wait");
             li.join();
         }
 
         model = (DefaultTableModel) downloadList_tab.getModel();
         String a[] = new String[3];
-        
-            for (int i = 0; i < df.size(); i++) {
-                try {
-                    model.addRow(a);
-                    downloadList_tab.setValueAt(df.get(i).getFileName(), i, 0);
-                    downloadList_tab.setValueAt(df.get(i).getFileSize(), i, 1);
-                    downloadList_tab.setValueAt((df.get(i).getStatus() ? "Downloaded" : "Not Downloaded"), i, 0);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
 
-            }
-        System.out.println("done");
+        for (int i = 0; i < df.size(); i++) {
+            model.addRow(a);
+            int filesize = df.get(i).getFileSize();
+            downloadList_tab.setValueAt(df.get(i).getFileName(), i, 0);
+            downloadList_tab.setValueAt(((filesize!=0) ? ""+filesize : "Error with link"), i, 1);
+            downloadList_tab.setValueAt((df.get(i).getStatus() ? "Downloaded" : "Not Downloaded"), i, 2);
+
+        }
+        System.out.println(allnodes.size());
 
     }
 
@@ -103,7 +100,7 @@ public class Main extends javax.swing.JFrame {
 
         downloadList_tab.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {null, null, null}
             },
             new String [] {
                 "File Name", "Size", "Status"
@@ -223,26 +220,10 @@ public class Main extends javax.swing.JFrame {
 
     }
 
-    class GuiThread extends Thread {
-
-        private JProgressBar jp;
-
-        public GuiThread() {
-            this.jp = jp;
-        }
-
-        @Override
-        public void run() {
-            super.run(); //To change body of generated methods, choose Tools | Templates.
-
-        }
-
-    }
-
     private String url;
-    private String path;
+    private String rootpath;
     private int depth;
-    private Node<String> root = null;
+    private Node root = null;
     private DefaultTableModel model;
     protected static ArrayList<DownloadFile> df = new ArrayList<>();
     protected static ArrayList<Node> allnodes = new ArrayList<>();
