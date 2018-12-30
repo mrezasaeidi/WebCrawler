@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -47,31 +49,31 @@ public class LinkChecker extends Thread {
             String result = sb.toString();
             return result;
         } catch (PatternSyntaxException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return "";
     }
 
     @Override
     public void run() {
+        int i = 0;
         String root = this.root.getData();
         if (root.indexOf(".rar") != -1 || root.indexOf(".png") != -1 || root.indexOf(".jpg") != -1
                 || root.indexOf(".css") != -1 || root.indexOf(".zip") != -1 || root.indexOf(".png") != -1
                 || root.indexOf(".mp4") != -1 || root.indexOf(".mkv") != -1) {
             DownloadFile df = null;
             try {
-                df = new DownloadFile(this.root.getData(), this.root.getPath() + root);
-                //df.startDownload();
-                System.out.println(df.getFileName());
+                df = new DownloadFile(this.root.getData() , this.root.getParent().getPath() + "\\");
+                Main.df.add(df);
             } catch (MalformedURLException ex) {
                 ex.printStackTrace();
             }
             Node<DownloadFile> newnode = new Node<DownloadFile>(df, this.root.getPath() + root);
-            newnode.setParent(newnode);
+            newnode.setParent(this.root);
             this.root.addChild(newnode);
             return;
         }
@@ -82,15 +84,15 @@ public class LinkChecker extends Thread {
             String path = "";
             if (this.root.getParent() == null) {
                 path = this.root.getPath();
-                System.out.println(path);
             } else {
-                path = this.root.getParent().getPath() + root;
+                path = this.root.getParent().getPath() + "\\" + root;
             }
             File theDir = new File(path);
             theDir.mkdir();
             String input;
             input = get_links(root);
-            String patternString = "href=\\\"(http|https):[\\w-/\\?=&.]*\"";
+            //String patternString = "(href|src)=(\\\"|\\\')(http|https):[\\w-/\\?=&.]*\"|\'";
+            String patternString = "\\s*(?i)href\\s*=\\s*(\"([^\"]*\")|'[^']*'|([^'\">\\s]+))";
             Pattern pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(input);
 
@@ -100,15 +102,24 @@ public class LinkChecker extends Thread {
                 String match = input.substring(start, end);
                 match = match.replace("href=", "");
                 match = match.replace("\"", "");
+                match = match.replace("src=", "");
+                match = match.replace("https", "http");
+                match = match.replace("SRC=", "");
+                match = match.replace("HREF=", "");
                 Node<String> newnode = new Node<String>(match, path);
-                System.out.println(newnode.getPath());
                 newnode.setParent(this.root);
                 this.root.addChild(newnode);
-                new LinkChecker(newnode, depth - 1);
+                Main.allnodes.add(newnode);
+                try {
+                    new LinkChecker(newnode, depth - 1).join();
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+                
             }
         } catch (PatternSyntaxException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
-
+        System.gc();
     }
 }

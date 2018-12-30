@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui;
+package webcrawler;
 
 import java.io.File;
 import javax.swing.JFrame;
@@ -30,7 +30,7 @@ public class FileBrowser implements Runnable {
         JFrame frame = new JFrame("File Browser");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        File fileRoot = new File("E:/");
+        File fileRoot = new File("C:/");
         root = new DefaultMutableTreeNode(new FileNode(fileRoot));
         treeModel = new DefaultTreeModel(root);
 

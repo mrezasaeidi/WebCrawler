@@ -1,4 +1,3 @@
-
 package webcrawler;
 
 import java.io.BufferedInputStream;
@@ -37,31 +36,33 @@ public class DownloadThread extends Thread {
     @Override
     public void run() {
         try {
-            HttpURLConnection http = (HttpURLConnection) url.openConnection();
+            HttpURLConnection http = null;
+            http = (HttpURLConnection) url.openConnection();
             double filesize = (double) http.getContentLength();
             BufferedInputStream in = new BufferedInputStream(http.getInputStream());
             FileOutputStream fos = new FileOutputStream(out);
+            System.out.println(out.getPath());
             BufferedOutputStream bos = new BufferedOutputStream(fos, 1024);
             byte[] buffer = new byte[1024];
             double downloaded = 0.00;
             int read = 0;
             double percentDownloaded = 0.00;
-            while ((read = in.read(buffer, 0, 1024)) >= 0) {                
+            while ((read = in.read(buffer, 0, 1024)) >= 0) {
                 bos.write(buffer, 0, read);
                 downloaded += read;
                 if (jp != null) {
-                    percentDownloaded += (downloaded * 100 / filesize);  
+                    percentDownloaded += (downloaded * 100 / filesize);
                     this.jp.setMaximum((int) filesize);
-                    this.jp.setValue((int)downloaded);
-                    this.jp.setString(percentDownloaded+"%");
+                    this.jp.setValue((int) downloaded);
+                    this.jp.setString(percentDownloaded + "%");
                 }
             }
             this.status = true;
             bos.close();
             in.close();
 
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
+        } catch (Exception ioe) {
+            //ioe.printStackTrace();
         }
     }
 

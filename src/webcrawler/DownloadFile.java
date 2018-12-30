@@ -22,17 +22,20 @@ public class DownloadFile {
     private DownloadThread dt;
     
     public DownloadFile(String url , String path) throws MalformedURLException{
-        this.url = new URL(url);
+        try{
+            this.url = new URL(url);
+        }catch(Exception e){
+            
+        }
         this.path = path;
-        this.name = url;
-        
+        this.name = url.replaceAll("/", ".");
     }
     
     /**
     * start downloading file and saving it
     */
     public void startDownload(){
-        dt = new DownloadThread(this.url, new File(this.path));
+        dt = new DownloadThread(this.url, new File(this.path + "\\" + this.name));
     }
     
     /**

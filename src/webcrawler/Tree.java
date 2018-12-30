@@ -1,5 +1,6 @@
 package webcrawler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -8,16 +9,16 @@ import java.util.List;
  */
 public class Tree {
 
-    private Node<String> root;
-    private List<Node> allnodes;
+    private Node root;
+    private ArrayList<Node> allnodes;
 
-    public Tree(String root, String path) {
-        this.root = new Node<String>(root, path);
+    public Tree(Node root, String path) {
+        this.root = root;
         this.allnodes = null;
 
     }
 
-    public String getData() {
+    public Object getData() {
         return this.root.getData();
     }
 
@@ -25,11 +26,12 @@ public class Tree {
         return this.root.getPath();
     }
 
-    private void visitAll(Node node) {
+    public void visitAll(Node node) {
         try {
             this.allnodes.addAll(0, root.getChildren());
             this.allnodes.forEach((el) -> {
                 visitAll(el);
+                System.out.println(el.getData());
             });
         } catch (Exception e) {
             return;
@@ -40,9 +42,18 @@ public class Tree {
      * returning all nodes as a list
      * 
      */
-    public List<Node> getAllNodes() {
+    public ArrayList<Node> getAllNodes() {
         allnodes.add(root);
+        System.out.println(root.getData());
         visitAll(root);
         return allnodes;
+    }
+    
+    /**
+     * return the root of the tree
+     * 
+     **/
+    public Node getRoot(){
+        return this.root;
     }
 }
